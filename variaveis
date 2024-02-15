@@ -3,3 +3,6 @@ tpadrao=120
 
 # Resposta para inicar o script
 anwser="1"
+
+# Arquivo default para contagem de tarefas
+arqtemp="/tmp/cronometroshell"

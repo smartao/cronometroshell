@@ -4,17 +4,20 @@ function MAIN(){
 
 clear # Limpando a tela
 . variaveis # Importando arquivo de variaveis
+touch $arqtemp # Criando arquivo temporario caso nao existe
 CORES # Executando a funcao cores
 TEMPO $1 # Executando a funcao tempo
 
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
     validacao=0
+    t=$(cat $arqtemp) # Pegando valor da tarefa no arquivo temp
     ((t++)) # Incrementando o numero de tarefas
-    echo -e "\nIniciando contagem da acao: ${CVE}$t${CF}"
+    echo -e "\nIniciando contagem da acao: ${CVE} $t ${CF}"
+    echo $t > $arqtemp # Gravando incremento de tarefa no arquivo tempo
     for (( i=1; i<=$time; i++ )) # Contagem regressiva timer
     do 
-        echo -e "${CAM}Contagem: $i ${CF}" 
+        echo -e "${CAM}Contagem: $i ${CF}" # Mostrando contagem na tela
         sleep 1 
     done
     echo -e "${CVE}O tempo acabou! ${CF}"
@@ -38,6 +41,7 @@ do
         esac
     done
 done
+rm $arqtemp # Deletando arquivo de contagem de tarefas
 } 
 
 function CORES(){
