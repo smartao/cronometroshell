@@ -1,11 +1,15 @@
 #!/bin/bash
 
 function MAIN(){
+
+#clear # limpando a tela
+tpadrao=120
+anwser="1" # resposta para inicar o script
+#time=$tpadrao
 CORES # carregando a funcao cores
-clear # limpando a tela
-time=2; # tempo padrao
-anwser="y" # resposta padrao
-t=0 # contador de tarefas
+TEMPO $1 # carregando a funcao tempo
+
+
 
 while [ $anwser != "n" ]
 do
@@ -45,8 +49,22 @@ CVE='\e[0;31m' # Red
 CAM='\e[0;33m' # Yellow 
 CVD='\e[0;32m' # Verde
 CPU='\e[0;35m' # Roxo
-CF='\e[0m'    # Tag end
+CF='\e[0m'     # Tag end
 }
 
-MAIN
-exit;
+function TEMPO(){
+    time=$1
+    if [ -z $time ]; then # validando se existe argumento
+        time=4 # tempo padrao
+    else # caso exista
+        tpadrao=2
+        if [[ $time ]] && [ $time -eq $time 2>/dev/null ]; then # validando se é um numero
+            echo ok > /dev/null
+        else
+            echo -e "${CAM}Script aceita apenas numeros como timer, sera usado o tempo padrao: $tpadrao${CF}"
+            time=$tpadrao
+        fi
+    fi
+}
+
+MAIN $1
