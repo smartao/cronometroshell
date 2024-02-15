@@ -2,28 +2,24 @@
 
 function MAIN(){
 
-#clear # limpando a tela
-tpadrao=120
-anwser="1" # resposta para inicar o script
-#time=$tpadrao
-CORES # carregando a funcao cores
-TEMPO $1 # carregando a funcao tempo
+clear # Limpando a tela
+. variaveis # Importando arquivo de variaveis
+CORES # Executando a funcao cores
+TEMPO $1 # Executando a funcao tempo
 
-
-
-while [ $anwser != "n" ]
+while [ $anwser != "n" ] # Validando resposta do usuario
 do
     validacao=0
-    ((t++))
+    ((t++)) # Incrementando o numero de tarefas
     echo -e "\nIniciando contagem da acao: ${CVE}$t${CF}"
-    for (( i=1; i<=$time; i++ ))
+    for (( i=1; i<=$time; i++ )) # Contagem regressiva timer
     do 
         echo -e "${CAM}Contagem: $i ${CF}" 
         sleep 1 
     done
     echo -e "${CVE}O tempo acabou! ${CF}"
     read -p "Comecar novamente? y/n " anwser
-    while [ $validacao -ne 1 ]
+    while [ $validacao -ne 1 ] # Validador da reposta do usuario
     do
         case $anwser in
         "n")
@@ -57,7 +53,6 @@ function TEMPO(){
     if [ -z $time ]; then # validando se existe argumento
         time=4 # tempo padrao
     else # caso exista
-        tpadrao=2
         if [[ $time ]] && [ $time -eq $time 2>/dev/null ]; then # validando se é um numero
             echo ok > /dev/null
         else

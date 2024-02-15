@@ -1,0 +1,5 @@
+# Tempo padrao usado para caso de erro de digitacao do argumento
+tpadrao=120
+
+# Resposta para inicar o script
+anwser="1"
