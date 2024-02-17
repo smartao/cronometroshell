@@ -1,0 +1,11 @@
+## TODO
+
+[ok] Verificar se fica legal colocar o cowsay no script
+ [ok]   Adicioanr cowsay no script
+ [ok]   Adicionar variavel para ativar ou não o cowsay
+[  ]Escrever arquivo readme forma básica de uso
+ [  ]   Adicionar comentário sobre arquivo de variaveis
+ [  ]   Adicionar que variavel de som precisa ser alterada
+ [ok]   Colocar emblema no github testado no LinuxMint 21.3
+[ok] Colocar um dragao caso erre 5 vezes o y/n
+[  ] Pesqusar caracteres de saida no meio de um laço de shell script
