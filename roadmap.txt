@@ -6,13 +6,14 @@ Escrever arquivo readme forma básica de uso
 Pesqusar caracteres de saida no meio de um laço de shell script
 
 ## DONE
-Verificar se fica legal colocar o cowsay no script
+Modo Funny
+   Verificar se fica legal colocar o cowsay no script
     Adicioanr cowsay no script
     Adicionar variavel para ativar ou não o cowsay
+readme 
    Colocar emblema no github testado no LinuxMint 21.3
+Ajustes
 Colocar um dragao caso erre 5 vezes o y/n
 
 ## REFERENCIAS
-
-readme
-https://github.com/smartao/automacao_voc/blob/master/README.md?plain=1
+readme https://github.com/smartao/automacao_voc/blob/master/README.md?plain=1
