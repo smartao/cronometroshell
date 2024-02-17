@@ -1,4 +1,5 @@
 # cronometroshell
 Um simples cronometro em shell script
 
-https://img.shields.io/badge/LinuxMint%20-%2021.3%20-%20Green
+![license](https://img.shields.io/badge/license-MIT-orange?style=flat-square)
+![distro](https://img.shields.io/badge/Distro-LinuxMint_21.3-green?style=flat-square)
