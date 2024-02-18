@@ -11,9 +11,11 @@ arqtemp="/tmp/cronometroshell"
 # O caminho padrao é do linux mint 21.3
 audio="/usr/share/sounds/LinuxMint/stereo/button-toggle-off.ogg"
 
-# Ativa ou desativa o cowsay
-# Valores aceitos 0 ou 1
-funny=1
+# Alterando entre os modos do script
+# 0 script sem nenhuma cor, modo minimalista
+# 1 script usa as cores da funcao APLICACORES
+# 2 script usa o cowsay + lolcat para deixar tudo bem colorida
+fun=2
 
 # Padrao de cores usado
 lolcat="lolcat --seed 0 --spread 0.6"

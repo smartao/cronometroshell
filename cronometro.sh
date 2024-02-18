@@ -6,32 +6,37 @@ function MAIN(){
 # Necessario alterar conforme necessidade
 DIR=/home/sergei/Midias/Dev/Shell/cronometroshell
 
-clear
+clear # Limpando a tela
 . ${DIR}/variaveis # Importando arquivo de variaveis
 touch $arqtemp # Criando arquivo temporario caso nao existe
-
-CORES # Executando a funcao cores
+if [ $fun -eq 1 ]; then 
+    APLICACORES # Executando a funcao cores
+fi
 VALIDATEMPO $1 # Executando a funcao valida tempo
 
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
-    validacao=0 # setando valor em 0 
+    validacao=0 # definindo valor em 0 
     t=$(cat $arqtemp) # Pegando valor da tarefa no arquivo temp
-    ((t++)) # Incrementando o numero de tarefas
-
-    if [ $funny -eq 1 ]; then # Verificando se o funny esta ativo 
+    ((t++)) # Incrementando o número de tarefas
+    if [ $fun -eq 2 ]; then # Verificando se o fun esta ativo 
         cowsay "Iniciando contagem da acao: $t" | $lolcat
     else
         echo -e "\nIniciando contagem da acao: ${CVE}$t${CF}"
     fi
     echo $t > $arqtemp # Gravando incremento de tarefa no arquivo tempo
-    for (( i=1; i<=$time; i++ )) # Contagem regressiva timer
+    for (( i=1; i<=$time; i++ )) # Contagem regressiva na tela
     do 
-        echo -e "${CAM}Contagem: $i ${CF}" # Mostrando contagem na tela
-        sleep 1 
+        ((seed++)) # Incementando valor do seed para alterar a cor
+        if [ $fun -eq 2 ]; then 
+            echo -e "Contagem: $i" | lolcat --seed $seed --spread 100
+        else
+            echo -e "${CAM}Contagem: $i ${CF}" # Mostrando contagem na tela
+        fi
+        sleep 1 # 1 segundo da contagem da tela
     done
     paplay $audio # tocando audio quando terminar a tarefa
-    if [ $funny -eq 1 ]; then # Verificando se o funny esta ativo 
+    if [ $fun -eq 2 ]; then 
         cowsay "O tempo acabou! começar novamente? y/n "| $lolcat
         read anwser
     else
@@ -42,7 +47,7 @@ do
     do
         case $anwser in
         "n")
-            if [ $funny -eq 1 ]; then 
+            if [ $fun -eq 2 ]; then 
                 cowsay "By =)"| lolcat
             else
                 echo -e "${CVD}Saindo${CF}\n"
@@ -54,7 +59,7 @@ do
             ;;
         *) 
             validacao=0 # Desativa o validador
-            if [ $funny -eq 1 ]; then
+            if [ $fun -eq 2 ]; then
                 ((e++)) # Contador de erros
                 if [ $e -gt 3 ]; then # caso o numero de erros seja maior que 3 vezes
                     cowsay -f dragon Dracarys! Digite apenas y/n! | $lolcatdragon
@@ -69,7 +74,7 @@ do
                fi
             else
                 echo -en "${CAM}"
-                read -p "Digite apenas y/n! -.-' " anwser 
+                read -p "Digite apenas y/n!" anwser 
                 echo -e "${CF}"
             fi
             ;;
@@ -79,7 +84,7 @@ done
 rm $arqtemp # Deletando arquivo de contagem de tarefas
 } 
 
-function CORES(){
+function APLICACORES(){
 CVE='\e[0;31m' # Red 
 CAM='\e[0;33m' # Yellow 
 CVD='\e[0;32m' # Verde
