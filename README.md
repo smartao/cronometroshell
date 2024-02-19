@@ -6,7 +6,7 @@ Um cronometro regressivo em shell script que pode ser divertido ou não.
 
 ## Pré requisitos
 
-Pacotes utilizados
+Pacotes utilizados:
 ```
 cowsay
 lolcat
@@ -29,14 +29,22 @@ No arquivo ``variaveis`` é possível fazer algumas alterações no funcionament
 
 Podemos apenas executar o script, ele executará uma contagem regressiva em segundos baseado no valor configurado no arquivo ``variaveis`` que por padrão é 120 segundos.
 
-´´´
+```
 ./cronometroshell.sh
-´´´ 
+```
 
-### Denindo o tempo
+![](imagens/cronometroshell-01.png)
+
+### Denfinindo o tempo
 
 Podemos definir um tempo em segundos para a execucação do cronometro
 
-´´´
+```
 ./cronometroshell.sh 10
-´´´ 
+```
+
+![](imagens/cronometroshell-02.png)
+
+
+
+![](imagens/cronometroshell-03.png)
