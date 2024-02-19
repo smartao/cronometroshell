@@ -1,7 +1,7 @@
-.tmp
-.txt
-tarefas.txt
-roadmap.txt
+*.tmp
+*.txt
+x1.sh
+x2.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
