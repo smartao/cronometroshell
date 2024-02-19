@@ -4,15 +4,16 @@ function MAIN(){
 # Diretorio de variaveis
 # Necessario alterar conforme necessidade
 DIR=/home/sergei/Midias/Dev/Shell/cronometroshell
-
 clear # Limpando a tela
 . ${DIR}/variaveis # Importando arquivo de variaveis
+VALIDABINARIOS # Validando se os binarios necessários são localizados
 
 if [ $fun -eq 1 ]; then 
     APLICACORES # Executando a funcao cores
 fi
 VALIDATEMPO $1 # Executando a funcao valida tempo
 
+# Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
     # Tela inicial do script
@@ -32,8 +33,8 @@ do
         else
             echo -e "${CAM}Contagem: $i ${CF}" # Mostrando contagem na tela
         fi
-        read -n1 -t 1 TECLA # Lendo a tecla e aguardando 1 segundo
-        case "$TECLA" in
+        read -n1 -t 1 tecla # Lendo a tecla e aguardando 1 segundo
+        case "$tecla" in
         n) # Caso seja n (next) va para proxima acao
             ttemp=$time; # Armazendo tempo
             time=0  # Zerando o time para sair do cronometro
@@ -50,7 +51,7 @@ do
     done
     TOCAAUDIO # Funcao para tocar audio
     # Validando se foi precionado a teclado no meio da contagem
-    if [ -n "$TECLA" ] && [ $TECLA = "n" ]; then # caso sim e seja a tecla n
+    if [ -n "$tecla" ] && [ $tecla = "n" ]; then # caso sim e seja a tecla n
         anwser=y # adicionando a reposta padrao
         seed=22 # Restaurando o valor da seed
         time=$ttemp # Restaurando o valor do timer
@@ -100,6 +101,19 @@ do
     done
 done
 } 
+
+function VALIDABINARIOS(){
+    arquivos=("$audio" "$bicow" "$bilol" "$biapl")
+    for arquivo in "${arquivos[@]}"; do
+        # Verifica se o arquivo não existe
+        if [ ! -f "$arquivo" ]; then
+            echo "O arquivo '$arquivo' necessário para o script não existe"
+            echo "Configure o caminho usando o arquivo de variaveis"
+            echo "Caso não exista no sistema é necessário insta-lo"
+            exit
+        fi
+    done
+}
 
 function APLICACORES(){
 CVE='\e[0;31m' # Red 

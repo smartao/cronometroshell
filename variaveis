@@ -11,6 +11,9 @@ anwser="1"
 # O caminho padrao é do linux mint 21.3
 audio="/usr/share/sounds/LinuxMint/stereo/button-toggle-off.ogg"
 
+# Tempo entre cada ação quando precionado a tecla n
+delay=2
+
 # Alterando entre os modos do script
 # 0 script sem nenhuma cor, modo minimalista
 # 1 script usa as cores da funcao APLICACORES
@@ -25,5 +28,7 @@ lolcatdragon="lolcat --seed 5 --spread 100"
 # padrao é 22 para terminar os 120segundos na cor vemelha
 seed=22
 
-# Tempo entre cada ação quando precionado a tecla n
-delay=2
+# Arquivos binarios usado pelo script
+bicow="/usr/games/cowsay2"
+bilol="/usr/games/lolcat"
+biapl="/usr/bin/aplay"
