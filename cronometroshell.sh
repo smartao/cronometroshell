@@ -5,7 +5,9 @@ function MAIN(){
 # Necessario alterar conforme necessidade
 DIR=/home/sergei/Midias/Dev/Shell/cronometroshell
 clear # Limpando a tela
-. ${DIR}/variaveis # Importando arquivo de variaveis
+#. ${DIR}/variaveis # Importando arquivo de variaveis
+script_dir=$(dirname "$0")
+. $script_dir/variaveis
 VALIDABINARIOS # Validando se os binarios necessários são localizados
 
 if [ $fun -eq 1 ]; then 
@@ -13,6 +15,7 @@ if [ $fun -eq 1 ]; then
 fi
 VALIDATEMPO $1 # Executando a funcao valida tempo
 
+anwser="y" # Resposta para iniciar o script
 # Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
@@ -138,7 +141,9 @@ function VALIDATEMPO(){
 }
 
 function TOCAAUDIO(){
-    paplay $audio 
+    if [ $mute = 0 ];then
+        paplay $audio
+    fi
 }
 
 function SAIDA(){

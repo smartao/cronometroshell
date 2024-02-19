@@ -1,17 +1,14 @@
-# Tempo padrao usado para caso de erro de digitacao do argumento
+# Tempo padrao usado caso não seja passado argumento para o script
 tpadrao=120
 
-# Resposta para inicar o script
-anwser="1"
-
-# Arquivo default para contagem de tarefas
-#arqtemp="/tmp/cronometroshell"
+# Ativa ou desativa o audio
+mute=0
 
 # Arquivo de audio que sera tocado
 # O caminho padrao é do linux mint 21.3
 audio="/usr/share/sounds/LinuxMint/stereo/button-toggle-off.ogg"
 
-# Tempo entre cada ação quando precionado a tecla n
+# Delay entre cada ação quando precionado a tecla n
 delay=2
 
 # Alterando entre os modos do script
@@ -20,15 +17,15 @@ delay=2
 # 2 script usa o cowsay + lolcat para deixar tudo bem colorida
 fun=2
 
-# Padrao de cores usado
+# Padrao de cores usado pelo pacote lolcat
 lolcat="lolcat --seed 0 --spread 0.6"
 lolcatdragon="lolcat --seed 5 --spread 100"
 
-# Cor inicial da contagem para mostrar na tela
-# padrao é 22 para terminar os 120segundos na cor vemelha
+# Cor inicial da contagem lolcat para mostrar na tela
+# padrao é 22 para terminar os 120seg na cor vemelha
 seed=22
 
 # Arquivos binarios usado pelo script
-bicow="/usr/games/cowsay2"
+bicow="/usr/games/cowsay"
 bilol="/usr/games/lolcat"
 biapl="/usr/bin/aplay"
