@@ -11,10 +11,8 @@ if [ $fun -eq 1 ]; then
     APLICACORES # Executando a funcao cores
 fi
 VALIDATEMPO $1 # Executando a funcao valida tempo
-
 anwser="y" # Resposta para iniciar o script
-mediat=0 # Variavei de media de tempo gasto
-somat=0 # Variavel para somar o tempo gasto
+
 # Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
@@ -154,11 +152,15 @@ function TOCAAUDIO(){
 
 function SAIDA(){
     let mediat=$somat/$t # Calculando a media do tempo total
-    if [ $fun -eq 2 ]; then 
-        #cowsay "Total de acoes:${t} By =) "| lolcat
-        cowsay "Acoes:${t}, Tempo total:${somat}, Media de tempo:${mediat} By =) "| lolcat
+    if [ $somat -ge 60 ]; then # Caso tenha passado mais que 60 segundos
+        min=$(( somat / 60 ))
+        seg=$(( somat % 60 ))
+        somat="${min}m e ${seg}s" # Atribuindo valor em minutos e segundos a somat
+    fi
+    if [ $fun -eq 2 ]; then
+        cowsay "Acoes:${t}, Tempo total:${somat}, Media de tempo:${mediat}s by =) "| lolcat
     else
-        echo -e "${CVD}\nTotal de acoes:$t Saindo${CF}\n"
+        echo -e "${CVD}\nTotal de acoes:${t} Saindo${CF}\n"
     fi
     exit 0;
 }
