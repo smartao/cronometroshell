@@ -9,7 +9,7 @@ mute=0
 audio="/usr/share/sounds/LinuxMint/stereo/button-toggle-off.ogg"
 
 # Delay entre cada ação quando precionado a tecla n
-delay=2
+delay=1
 
 # Alterando entre os modos do script
 # 0 script sem nenhuma cor, modo minimalista

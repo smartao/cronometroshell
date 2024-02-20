@@ -1,11 +1,8 @@
 #!/bin/bash
 
 function MAIN(){
-# Diretorio de variaveis
-# Necessario alterar conforme necessidade
-DIR=/home/sergei/Midias/Dev/Shell/cronometroshell
 clear # Limpando a tela
-#. ${DIR}/variaveis # Importando arquivo de variaveis
+# Carregando Arquvio de variaveis
 script_dir=$(dirname "$0")
 . $script_dir/variaveis
 VALIDABINARIOS # Validando se os binarios necessários são localizados
@@ -16,6 +13,8 @@ fi
 VALIDATEMPO $1 # Executando a funcao valida tempo
 
 anwser="y" # Resposta para iniciar o script
+mediat=0 # Variavei de media de tempo gasto
+somat=0 # Variavel para somar o tempo gasto
 # Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
@@ -28,7 +27,7 @@ do
         echo -e "\nIniciando contagem da acao: ${CVE}$t${CF}"
     fi
     # Contagem regressiva da tela
-    for (( i=1; i<=$time; i++ ))
+    for (( i=1, c=0; i<=$time; i++, c++ ))
     do 
         ((seed++)) # Incementando valor do seed para alterar a cor
         if [ $fun -eq 2 ]; then 
@@ -46,8 +45,10 @@ do
             else
                 echo -e "${CVD}\nIniciando proxima contagem ${CF}"
             fi
+            SOMATEMPO
         ;;
         e) # caso seja e (exit) saia do programa
+            SOMATEMPO
             SAIDA 
         ;;
         esac
@@ -55,11 +56,12 @@ do
     TOCAAUDIO # Funcao para tocar audio
     # Validando se foi precionado a teclado no meio da contagem
     if [ -n "$tecla" ] && [ $tecla = "n" ]; then # caso sim e seja a tecla n
-        anwser=y # adicionando a reposta padrao
+        anwser=y # adicionando a reposta para sair do script
         seed=22 # Restaurando o valor da seed
         time=$ttemp # Restaurando o valor do timer
         sleep $delay # Delay para reiniciar a contagem
     else # Caso nao, imprimir que o tempo acabou
+        SOMATEMPO
         if [ $fun -eq 2 ]; then
             cowsay "O tempo acabou! começar novamente? y/n "| $lolcat
             read anwser
@@ -68,7 +70,7 @@ do
             read -p "Comecar novamente? y/n " anwser
         fi
     fi
-    # Validador da reposta do usuario
+    # Validando a reposta do usuario se deseja continuar ou nao
     while [ $validacao -ne 1 ]
     do
         case $anwser in
@@ -80,7 +82,7 @@ do
             validacao=1
             ;;
         *) 
-            validacao=0 # Desativa o validador
+            validacao=0 # Desativa a validacao
             if [ $fun -eq 2 ]; then
                 ((e++)) # Contador de erros
                 if [ $e -gt 3 ]; then # caso o numero de erros seja maior que 3 vezes
@@ -140,6 +142,10 @@ function VALIDATEMPO(){
     fi
 }
 
+function SOMATEMPO(){
+    let somat=$somat+$c # Somando o tempo total gastos
+}
+
 function TOCAAUDIO(){
     if [ $mute = 0 ];then
         paplay $audio
@@ -147,8 +153,10 @@ function TOCAAUDIO(){
 }
 
 function SAIDA(){
+    let mediat=$somat/$t # Calculando a media do tempo total
     if [ $fun -eq 2 ]; then 
-        cowsay "Total de acoes:${t} By =) "| lolcat
+        #cowsay "Total de acoes:${t} By =) "| lolcat
+        cowsay "Acoes:${t}, Tempo total:${somat}, Media de tempo:${mediat} By =) "| lolcat
     else
         echo -e "${CVD}\nTotal de acoes:$t Saindo${CF}\n"
     fi

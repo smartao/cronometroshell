@@ -36,8 +36,6 @@ Podemos apenas executar o script, ele executará uma contagem regressiva em segu
 ./cronometroshell.sh
 ```
 
-![](imagens/cronometroshell-01.png)
-
 #### Denfinindo o tempo
 
 Podemos definir um tempo em segundos para a execucação do cronometro
