@@ -2,48 +2,52 @@
 
 function MAIN(){
 clear # Limpando a tela
-# Carregando Arquvio de variaveis
-script_dir=$(dirname "$0")
-. $script_dir/variaveis
-VALIDABINARIOS # Validando se os binarios necessários são localizados
 
-if [ $fun -eq 1 ]; then 
-    APLICACORES # Executando a funcao cores
-fi
-VALIDATEMPO $1 # Executando a funcao valida tempo
+. $(dirname "$0")/variaveis # Carregando arquvio de variaveis
+
+APLICACORES # Executando a funcao cores
+VALIDABINARIOS # Validando se os binarios necessários existem
+VALIDAARGUMENTOS $1 $2 $3 # Executando a funcao de validar argumentos
+
 anwser="y" # Resposta para iniciar o script
-
+modoscript="temporizador"
+falha=0 # Definindo qtd de tarefas nao executadas dentro do prazo
 # Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
 do
     # Tela inicial do script
     validacao=0 # definindo valor em 0 
     ((t++)) # Incrementando o número de tarefas
-    if [ $fun -eq 2 ]; then # Verificando se o fun esta ativo 
-        cowsay "Iniciando contagem da acao: $t" | $lolcat
+    fraseinicontagem="Iniciando contagem da acao: $t"
+    if [ $fun -eq 1 ]; then # Verificando se o fun esta ativo 
+        cowsay "${fraseinicontagem}" | $lolcat
     else
-        echo -e "\nIniciando contagem da acao: ${CVE}$t${CF}"
+        echo -e "\n${fraseinicontagem}"
     fi
     # Contagem regressiva da tela
     for (( i=1, c=0; i<=$time; i++, c++ ))
     do 
         ((seed++)) # Incementando valor do seed para alterar a cor
-        if [ $fun -eq 2 ]; then 
+        if [ $fun -eq 1 ]; then 
             echo "Contagem: $i" | lolcat --seed $seed --spread 100
         else
             echo -e "${CAM}Contagem: $i ${CF}" # Mostrando contagem na tela
         fi
-        read -n1 -t 1 tecla # Lendo a tecla e aguardando 1 segundo
+        read -s -n1 -t 1 tecla # Lendo a tecla e aguardando 1 segundo
         case "$tecla" in
         n) # Caso seja n (next) va para proxima acao
             ttemp=$time; # Armazendo tempo
             time=0  # Zerando o time para sair do cronometro
-            if [ $fun -eq 2 ]; then
-                cowsay "Iniciando proxima contagem"| $lolcat
-            else
-                echo -e "${CVD}\nIniciando proxima contagem ${CF}"
-            fi
             SOMATEMPO
+        ;;
+        p)  
+            frasepausa="Pausando o cronometro, precione qualquer tecla para continuar"            
+            if [ $fun -eq 1 ]; then
+                cowsay "${frasepausa}"| $lolcat
+            else
+                echo -e "${frasepausa}"
+            fi
+            read -s -n1 # Aguardando precionar para seguir com a contagem
         ;;
         e) # caso seja e (exit) saia do programa
             SOMATEMPO
@@ -60,13 +64,14 @@ do
         sleep $delay # Delay para reiniciar a contagem
     else # Caso nao, imprimir que o tempo acabou
         SOMATEMPO
-        if [ $fun -eq 2 ]; then
-            cowsay "O tempo acabou! começar novamente? y/n "| $lolcat
-            read anwser
+        ((falha++)) # Incrementando a qtd de tarefas fora do prazo
+        frasetempocabou="O tempo acabou! começar novamente? y/n"
+        if [ $fun -eq 1 ]; then
+            cowsay "${frasetempocabou}"| $lolcat
         else
-            echo -e "${CVE}O tempo acabou! ${CF}"
-            read -p "Comecar novamente? y/n " anwser
+            echo -e "${frasetempocabou}"
         fi
+        read anwser
     fi
     # Validando a reposta do usuario se deseja continuar ou nao
     while [ $validacao -ne 1 ]
@@ -81,23 +86,23 @@ do
             ;;
         *) 
             validacao=0 # Desativa a validacao
-            if [ $fun -eq 2 ]; then
+            fraseerrodigitacaoyn="Digite apenas y/n!"
+            if [ $fun -eq 1 ]; then
                 ((e++)) # Contador de erros
                 if [ $e -gt 3 ]; then # caso o numero de erros seja maior que 3 vezes
-                    cowsay -f dragon Dracarys! Digite apenas y/n! | $lolcatdragon
+                    cowsay -f dragon Dracarys! ${fraseerrodigitacaoyn} | $lolcatdragon
                     if [ $e -gt 5 ]; then # caso erre mais que 5 vezes
                         cowsay -d Desisto... | $lolcat
                         exit 0;
                     fi
                     read anwser 
                 else
-                    cowsay -t "Digite apenas y/n!" | $lolcat
+                    cowsay -t "${fraseerrodigitacaoyn}" | $lolcat
                     read anwser 
                fi
             else
-                echo -en "${CAM}"
-                read -p "Digite apenas y/n!" anwser 
-                echo -e "${CF}"
+                echo "${fraseerrodigitacaoyn}"
+                read anwser 
             fi
             ;;
         esac
@@ -110,38 +115,83 @@ function VALIDABINARIOS(){
     for arquivo in "${arquivos[@]}"; do
         # Verifica se o arquivo não existe
         if [ ! -f "$arquivo" ]; then
-            echo "O arquivo '$arquivo' necessário para o script não existe"
-            echo "Configure o caminho usando o arquivo de variaveis"
-            echo "Caso não exista no sistema é necessário insta-lo"
-            exit
+            echo -e "
+            O arquivo ${CVE}'$arquivo'${CF} necessário para o não existe
+            Configure o caminho usando o arquivo de variaveis
+            Caso não exista no sistema é necessário insta-lo"
+            exit 0;
         fi
     done
 }
 
 function APLICACORES(){
-CVE='\e[0;31m' # Red 
-CAM='\e[0;33m' # Yellow 
-CVD='\e[0;32m' # Verde
-CPU='\e[0;35m' # Roxo
-CF='\e[0m'     # Tag end
+CVE='\e[0;31m' # Red ${CVE}
+CAM='\e[0;33m' # Yellow ${CAM}
+CVD='\e[0;32m' # Verde ${CVD}
+CPU='\e[0;35m' # Roxo ${CPU}
+CF='\e[0m'     # Tag end ${CF}
 }
 
-function VALIDATEMPO(){
-    time=$1
-    if [ -z $time ]; then # validando se existe argumento
+function HELP(){
+    __help="
+Use: $(basename $0) [OPCAO1] [OPCAO2]
+
+    OPCAO1:                 Pode ser omitida para executar o tempo padrao de 120s
+    -s <n>                  Defini o tempo em segundos
+    -m <n>                  Defini o tempo em minutos
+    -h, --help              Mostra essa página
+
+    OPCAO2:
+    -c                      Modo cronometro, depende ter o primeiro argumento do tempo
+    
+    EXEMPLOS: 
+    ./$(basename $0)
+    ./$(basename $0) -s 20
+    ./$(basename $0) -m 10
+    ./$(basename $0) -m 5 -c
+    "  
+    echo -e "$__help"
+}
+
+function VALIDAARGUMENTOS(){
+    arg1=$1
+    arg2=$2
+    arg3=$3
+    #echo $arg1 $arg2 $arg3
+    if [ -z $arg1 ]; then # validando se existe o primeiro argumento
         time=$tpadrao # caso nao exista setar tempo padrao
-    else # caso exista
-        if [[ $time ]] && [ $time -eq $time 2>/dev/null ]; then # validando se é um numero
-            echo ok > /dev/null
-        else
-            echo -e "${CAM}Script aceita apenas numeros como timer, sera usado o tempo padrao: $tpadrao${CF}"
-            time=$tpadrao
-        fi
-    fi
+    else
+        case $arg1 in
+        -s|-m)
+            if [[ $arg2 ]] && [ $arg2 -eq $arg2 2>/dev/null ]; then # validando se é um numero
+                time=$arg2 # Definindo o valor de time
+                if ! [ -z $arg3 ]; then
+                    modoscript="cronometro"
+                exit
+                fi
+            else
+                APLICACORES
+                echo -e "${CVE}Parametro ${arg2} nao aceito!${CF}"
+                HELP
+                exit
+            fi
+        ;;
+        -h|--help)
+            HELP
+            exit
+        ;;
+        *)
+            APLICACORES
+            echo -e "${CVE}Parametro ${arg1} nao aceito!${CF}"
+            HELP
+            exit
+        ;;
+        esac
+fi
 }
 
 function SOMATEMPO(){
-    let somat=$somat+$c # Somando o tempo total gastos
+    let somat=$somat+$c # Somando o tempo total gastos em segundos
 }
 
 function TOCAAUDIO(){
@@ -155,14 +205,39 @@ function SAIDA(){
     if [ $somat -ge 60 ]; then # Caso tenha passado mais que 60 segundos
         min=$(( somat / 60 ))
         seg=$(( somat % 60 ))
-        somat="${min}m e ${seg}s" # Atribuindo valor em minutos e segundos a somat
-    fi
-    if [ $fun -eq 2 ]; then
-        cowsay "Acoes:${t}, Tempo total:${somat}, Media de tempo:${mediat}s by =) "| lolcat
+        somat="${min}m e ${seg}s" # Atribuindo valor minutos e segundos a somat
+        if [ $mediat -ge 60 ]; then  # Caso a media seja maior que 1 minuto
+            min=$(( mediat / 60 ))  
+            seg=$(( mediat % 60 ))
+            mediafinal="${min}m e ${seg}s" # Setando a média em min e segundaos
+            frasefinal="
+            Acoes:...........................${t} 
+            Tempo:...........................${somat}
+            Media_de_tempo:..................${mediafinal}
+            Acoes_fora_do_prazo:.............${falha} 
+            by =)"
+        else # Caso seja menor que 60s sera mostrado em segundos
+            frasefinal="
+            Acoes:...........................${t} 
+            Tempo:...........................${somat}
+            Media_de_tempo...................${mediat}s
+            Acoes_fora_do_prazo:.............${falha} 
+            by =)"
+        fi
     else
-        echo -e "${CVD}\nTotal de acoes:${t} Saindo${CF}\n"
+        frasefinal="
+        Acoes:...........................${t} 
+        Tempo:...........................${somat}s
+        Media_de_tempo:..................${mediat}s 
+        Acoes_fora_do_prazo:.............${falha} 
+        by =)"
+    fi
+    if [ $fun -eq 1 ]; then
+        cowsay -W 45 $frasefinal | lolcat
+    else
+        echo -e "$frasefinal\n"
     fi
     exit 0;
 }
 
-MAIN $1
+MAIN $1 $2 $3

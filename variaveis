@@ -13,9 +13,8 @@ delay=1
 
 # Alterando entre os modos do script
 # 0 script sem nenhuma cor, modo minimalista
-# 1 script usa as cores da funcao APLICACORES
-# 2 script usa o cowsay + lolcat para deixar tudo bem colorida
-fun=2
+# 1 script usa o cowsay + lolcat para deixar tudo bem colorida
+fun=1
 
 # Padrao de cores usado pelo pacote lolcat
 lolcat="lolcat --seed 0 --spread 0.6"
