@@ -10,7 +10,7 @@ VALIDABINARIOS # Validando se os binarios necessários existem
 VALIDAARGUMENTOS $1 $2 $3 # Executando a funcao de validar argumentos
 
 anwser="y" # Resposta para iniciar o script
-modoscript="temporizador"
+#modoscript="temporizador"
 falha=0 # Definindo qtd de tarefas nao executadas dentro do prazo
 # Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
@@ -25,13 +25,15 @@ do
         echo -e "\n${fraseinicontagem}"
     fi
     # Contagem regressiva da tela
-    for (( i=1, c=0; i<=$time; i++, c++ ))
+    tempomin=$(( time / 60 ))
+    for (( i=1, c=0; i<=$time; i++, c++ )) 
     do 
         ((seed++)) # Incementando valor do seed para alterar a cor
+        frasecontagem="Contagem: ${i} ... ${time} (${tempomin}m)"
         if [ $fun -eq 1 ]; then 
-            echo "Contagem: $i" | lolcat --seed $seed --spread 100
+            echo "${frasecontagem}" | lolcat --seed $seed --spread 100
         else
-            echo -e "${CAM}Contagem: $i ${CF}" # Mostrando contagem na tela
+            echo -e "${frasecontagem}"
         fi
         read -s -n1 -t 1 tecla # Lendo a tecla e aguardando 1 segundo
         case "$tecla" in
@@ -61,7 +63,7 @@ do
         anwser=y # adicionando a reposta para sair do script
         seed=22 # Restaurando o valor da seed
         time=$ttemp # Restaurando o valor do timer
-        sleep $delay # Delay para reiniciar a contagem
+        sleep $delaycontagem # Delay para reiniciar a contagem
     else # Caso nao, imprimir que o tempo acabou
         SOMATEMPO
         ((falha++)) # Incrementando a qtd de tarefas fora do prazo
@@ -71,21 +73,33 @@ do
         else
             echo -e "${frasetempocabou}"
         fi
-        read anwser
+        # Bloco para tocar o alarme do fim do prazo da tarefa
+        if [[ $mute -eq 0 && $tocaalarme -ne 0 ]];then
+            while [ $tocaalarme -ne 0 ]; #Loop para tocar o alarme
+            do
+                read -n1 -t $delayalarme anwser
+                if ! [ -z $anwser ];then
+                    tocaalarme=0
+                else 
+                    TOCAAUDIO
+                fi
+            done
+        else
+            read anwser
+        fi
     fi
     # Validando a reposta do usuario se deseja continuar ou nao
     while [ $validacao -ne 1 ]
     do
         case $anwser in
         "n")
-            SAIDA
-            validacao=1
+            SAIDA # saindo do programa
             ;;
         "y")
-            validacao=1
+            validacao=1 # ok na validacao da tecla
             ;;
         *) 
-            validacao=0 # Desativa a validacao
+            validacao=0 # negando a validacao, pois foi digitado errado
             fraseerrodigitacaoyn="Digite apenas y/n!"
             if [ $fun -eq 1 ]; then
                 ((e++)) # Contador de erros
@@ -134,7 +148,7 @@ CF='\e[0m'     # Tag end ${CF}
 
 function HELP(){
     __help="
-Use: $(basename $0) [OPCAO1] [OPCAO2]
+    Use: $(basename $0) [OPCAO1] [OPCAO2]
 
     OPCAO1:                 Pode ser omitida para executar o tempo padrao de 120s
     -s <n>                  Defini o tempo em segundos
@@ -164,11 +178,15 @@ function VALIDAARGUMENTOS(){
         case $arg1 in
         -s|-m)
             if [[ $arg2 ]] && [ $arg2 -eq $arg2 2>/dev/null ]; then # validando se é um numero
-                time=$arg2 # Definindo o valor de time
-                if ! [ -z $arg3 ]; then
-                    modoscript="cronometro"
-                exit
+                if [ $arg1 == "-s" ]; then # caso seja -s = segundos
+                    time=$arg2 # Definindo o valor de baseado no segundo parametros
+                else # senão sera minutos
+                    let time=$arg2*60 # Transformando o tempo em minutos
                 fi
+                #if ! [ -z $arg3 ]; then
+                #    modoscript="cronometro"
+                #    exit
+                #fi
             else
                 APLICACORES
                 echo -e "${CVE}Parametro ${arg2} nao aceito!${CF}"

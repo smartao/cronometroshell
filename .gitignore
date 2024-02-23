@@ -2,6 +2,7 @@
 *.txt
 x1.sh
 x2.sh
+tmp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

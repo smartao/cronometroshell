@@ -4,12 +4,18 @@ tpadrao=120
 # Ativa ou desativa o audio
 mute=0
 
+# Ativar ou desativar o alarme, necessario o mute estar desativado
+tocaalarme=1
+
+# Delay  em segundos entre os toque do alarme quando o tempo acabar
+delayalarme=5
+
 # Arquivo de audio que sera tocado
 # O caminho padrao é do linux mint 21.3
 audio="/usr/share/sounds/LinuxMint/stereo/button-toggle-off.ogg"
 
-# Delay entre cada ação quando precionado a tecla n
-delay=1
+# Delay em segundos entre cada ação quando precionado a tecla n
+delaycontagem=1
 
 # Alterando entre os modos do script
 # 0 script sem nenhuma cor, modo minimalista
