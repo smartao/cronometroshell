@@ -2,6 +2,7 @@
 *.txt
 x1.sh
 x2.sh
+teste.sh
 tmp
 
 # Byte-compiled / optimized / DLL files

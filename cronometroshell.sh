@@ -10,7 +10,6 @@ VALIDABINARIOS # Validando se os binarios necessários existem
 VALIDAARGUMENTOS $1 $2 $3 # Executando a funcao de validar argumentos
 
 anwser="y" # Resposta para iniciar o script
-#modoscript="temporizador"
 falha=0 # Definindo qtd de tarefas nao executadas dentro do prazo
 # Executa enquanto a resposta do usuário foi n (nao)
 while [ $anwser != "n" ] # Validando resposta do usuario
@@ -29,7 +28,8 @@ do
     for (( i=1, c=0; i<=$time; i++, c++ )) 
     do 
         ((seed++)) # Incementando valor do seed para alterar a cor
-        frasecontagem="Contagem: ${i} ... ${time} (${tempomin}m)"
+        mincorrido=$(( i / 60 ))
+        frasecontagem="Contagem: ${i} ... ${time} (${mincorrido}m - ${tempomin}m)"
         if [ $fun -eq 1 ]; then 
             echo "${frasecontagem}" | lolcat --seed $seed --spread 100
         else
@@ -170,23 +170,18 @@ function HELP(){
 function VALIDAARGUMENTOS(){
     arg1=$1
     arg2=$2
-    arg3=$3
-    #echo $arg1 $arg2 $arg3
+    #arg3=$3 # Nao esta em uso por hora
     if [ -z $arg1 ]; then # validando se existe o primeiro argumento
         time=$tpadrao # caso nao exista setar tempo padrao
     else
         case $arg1 in
         -s|-m)
-            if [[ $arg2 ]] && [ $arg2 -eq $arg2 2>/dev/null ]; then # validando se é um numero
+            if [[ $arg2 ]] && [[ $arg2 =~ ^[0-9]+$ ]]; then # validando se é um numero
                 if [ $arg1 == "-s" ]; then # caso seja -s = segundos
                     time=$arg2 # Definindo o valor de baseado no segundo parametros
                 else # senão sera minutos
                     let time=$arg2*60 # Transformando o tempo em minutos
                 fi
-                #if ! [ -z $arg3 ]; then
-                #    modoscript="cronometro"
-                #    exit
-                #fi
             else
                 APLICACORES
                 echo -e "${CVE}Parametro ${arg2} nao aceito!${CF}"
